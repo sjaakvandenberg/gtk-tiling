@@ -3,7 +3,6 @@
 To download, save the repo as a zip or run `git clone https://github.com/sjaakvandenberg/gtk-tiling.git`. You'll also need `python2`, and `pygtk`.
 
 ```sh
-git clone https://github.com/sjaakvandenberg/gtk-tiling.git # download it
 chmod +x tiling.py        # give the script permissions to be executed
 ./tiling.py w h x y -d 1  # w (width), h (height) are dimensions in screen %
                           # -d enables (1) or disables (0) window decorations
