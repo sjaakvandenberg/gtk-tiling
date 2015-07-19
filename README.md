@@ -5,6 +5,7 @@ To download, save the repo as a zip or run `git clone https://github.com/sjaakva
 ```sh
 chmod +x tiling.py        # give the script permissions to be executed
 ./tiling.py w h x y -d 1  # w (width), h (height) are dimensions in screen %
+                          # x and y are coordinates, also as a % of the screen
                           # -d enables (1) or disables (0) window decorations
 ```
 
