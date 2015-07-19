@@ -39,10 +39,14 @@ TITLE_BAR = 22  # Put the height of your title bar here
 # Parse the command line arguments
 
 parser = argparse.ArgumentParser(description="Simple tiling for GTK")
-parser.add_argument("w", type=int, help="Frame width (in screen %)")
-parser.add_argument("h", type=int, help="Frame height (in screen %)")
-parser.add_argument("x", type=int, help="Frame x coordinate (in screen %)")
-parser.add_argument("y", type=int, help="Frame y coordinate (in screen %)")
+parser.add_argument("w", type=int,
+                    help="Frame width (in percentage of screen width)")
+parser.add_argument("h", type=int,
+                    help="Frame height (in percentage of screen height)")
+parser.add_argument("x", type=int,
+                    help="Frame x coordinate (in percentage of screen width)")
+parser.add_argument("y", type=int,
+                    help="Frame y coordinate (in percentage of screen height)")
 parser.add_argument("-d", type=int, choices=[0, 1], default=1,
                     help="1 for window decorations, 0 for none")
 args = parser.parse_args()
