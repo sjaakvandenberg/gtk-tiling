@@ -1,4 +1,4 @@
-#! /usr/bin/python2.7
+#! /usr/bin/env python3
 
 # tiling.py
 # Simple tiling for GTK
@@ -31,7 +31,9 @@
 # By Sjaak van den Berg
 # @svdb
 
-from gtk.gdk import *
+import gi
+gi.require_version('Gdk', '3.0')
+from gi.repository import Gdk
 import argparse
 
 TITLE_BAR = 22  # Put the height of your title bar here
@@ -51,32 +53,86 @@ parser.add_argument("-d", type=int, choices=[0, 1], default=1,
                     help="1 for window decorations, 0 for none")
 args = parser.parse_args()
 
-win = window_foreign_new((get_default_root_window()
-                          .property_get('_NET_ACTIVE_WINDOW')[2][0]))
-state = win.property_get('_NET_WM_STATE')[2]
+display = Gdk.Display.get_default()
+num_monitors = display.get_n_monitors()
+monitors = {}
+
+def active_window():
+    screen = Gdk.Screen.get_default()
+    window = scree.get_active_window()
+
+    if no_window(screen, window):
+        return None
+
+    return (window, screen)
+
+def no_window(screen, window):
+    return (
+        not screen.supports_net_wm_hint(
+            Gdk.atom_intern('_NET_ACTIVE_WINDOW', True)
+        ) or
+        not screen.supports_net_wm_hint(
+            Gdk.atom_intern('NET_WM_WINDOW_TYPE', True)
+        ) or
+        window.get_type_hint().value_name == 'GDK_WINDOW_TYPE_HINT_DESKTOP'
+    )
+
+def offsets(window):
+    origin = window.get_origin()
+    root = window.get_root_origin()
+
+    return (origin.x - root.x, origin.y - root.y)
+
+def get_multi_screen_offset(screen, window):
+    monitor = screen.get_monitor_at_window(window)
+    monitor_geometry = screen.get_monitor_geometry(monitor)
+
+    return monitor_geometry.x
+
+# for m in list(range(0, num_monitors)):
+#     monitors[m] = [
+#         display.get_monitor(m).get_geometry().width,
+#         display.get_monitor(m).get_geometry().height
+#     ]
+#     # monitors.append([
+#     #     display.get_monitor(m).get_geometry().width,
+#     #     display.get_monitor(m).get_geometry().height
+#     # ])
+
+# # print(monitors)
+# print()
+
+# screen = display.get_default_screen()
+# window = Gdk.Screen.get_default().get_active_window()
+
+# root_window = Gdk.get_default_root_window()
+
+# win = window_foreign_new((get_default_root_window()
+#                           .property_get('_NET_ACTIVE_WINDOW')[2][0]))
+# state = win.property_get('_NET_WM_STATE')[2]
 
 # Get the screen's width and height
 
-screen_width = screen_width()
-screen_height = screen_height()
+# screen_width = screen_width()
+# screen_height = screen_height()
 
 # Calculate the frame dimensions and location in pixels
 
-w = int(round(args.w / 100.0 * screen_width))
-h = int(round(args.h / 100.0 * screen_height))
-x = int(round(args.x / 100.0 * screen_width))
-y = int(round(args.y / 100.0 * screen_height))
+# w = int(round(args.w / 100.0 * screen_width))
+# h = int(round(args.h / 100.0 * screen_height))
+# x = int(round(args.x / 100.0 * screen_width))
+# y = int(round(args.y / 100.0 * screen_height))
 
-# Check whether decorations are desired
+# # Check whether decorations are desired
 
-if args.d == 1:
-    win.set_decorations(DECOR_TITLE)  # or DECOR_ALL for all decorations
-    win.move_resize(x, y, w, (h - TITLE_BAR))
-if args.d == 0:
-    win.set_decorations(0)
-    win.move_resize(x, y, w, h)
+# if args.d == 1:
+#     win.set_decorations(DECOR_TITLE)  # or DECOR_ALL for all decorations
+#     win.move_resize(x, y, w, (h - TITLE_BAR))
+# if args.d == 0:
+#     win.set_decorations(0)
+#     win.move_resize(x, y, w, h)
 
-# Apply changes to window
+# # Apply changes to window
 
-window_process_all_updates()
-flush()
+# win.window_process_all_updates()
+# win.flush()
